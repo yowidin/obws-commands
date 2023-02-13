@@ -1,0 +1,28 @@
+[project]
+name = "obws-commands"
+version = "0.0.1"
+authors = [
+    { name = "Dennis Sitelew", email = "yowidin@gmail.com" },
+]
+description = "An event-based command line interface for OBS Websocket"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+]
+dynamic = ["dependencies"]
+
+[project.scripts]
+obws-command = "obwsc.cli:run_obws_command"
+
+[project.urls]
+homepage = "https://github.com/yowidin/obws-commands"
+bugtrack = "https://github.com/yowidin/obws-commands/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
