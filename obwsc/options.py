@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from typing import Callable, Optional
+from typing import Callable, Optional, List
 
 import os
 import sys
@@ -24,7 +24,8 @@ class Options:
         return result
 
     @staticmethod
-    def parse(name: str, extra_args_fn: Optional[Callable[[ArgumentParser], None]] = None):
+    def parse(name: str, extra_args_fn: Optional[Callable[[ArgumentParser], None]] = None,
+              cmd_args: Optional[List[str]] = None):
         parser = ArgumentParser(name)
 
         Log.add_args(parser)
@@ -41,7 +42,7 @@ class Options:
         if extra_args_fn is not None:
             extra_args_fn(parser)
 
-        args = parser.parse_args()
+        args = parser.parse_args(args=cmd_args)
 
         Log.setup(args)
 

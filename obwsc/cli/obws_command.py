@@ -11,7 +11,7 @@ from obwsc.commands.event_based_command import EventBasedCommand
 
 import obwsc.commands
 
-from typing import Optional
+from typing import Optional, List
 
 
 def get_classes(package):
@@ -48,7 +48,7 @@ def collect_commands():
     return collect_commands_from_modules(get_classes(package=obwsc.commands))
 
 
-def main():
+def main(cmd_args: Optional[List[str]] = None):
     commands = collect_commands()
     parsers = {}
     arg_parser = None  # type: Optional[argparse.ArgumentParser]
@@ -71,7 +71,7 @@ def main():
             command_parser = subparsers.add_parser(name, help=hlp)
             cmd.add_arguments(command_parser)
 
-    config, args = Options.parse('obws-command', extra_args_fn=add_command_parsers)
+    config, args = Options.parse('obws-command', extra_args_fn=add_command_parsers, cmd_args=cmd_args)
 
     if args.command is None:
         arg_parser.print_usage(sys.stderr)
@@ -86,9 +86,9 @@ def main():
         print(result)
 
 
-def run():
+def run(cmd_args: Optional[List[str]] = None):
     try:
-        main()
+        main(cmd_args)
         sys.exit(0)
     except OBSSDKError as e:
         print(e)
