@@ -79,11 +79,12 @@ def main(cmd_args: Optional[List[str]] = None):
 
     obs_config = config['obs']
 
-    command = parsers[args.command]
-    extra_args = command.parse_arguments(args)
-    result = command(obs_config, **extra_args).execute()
-    if result is not None:
-        print(result)
+    command_type = parsers[args.command]
+    extra_args = command_type.parse_arguments(args)
+    with command_type(obs_config, **extra_args) as command:
+        result = command.execute()
+        if result is not None:
+            print(result)
 
 
 def run(cmd_args: Optional[List[str]] = None):

@@ -2,6 +2,7 @@ import obsws_python as obs
 
 import argparse
 import logging
+import time
 
 from threading import Event
 
@@ -45,3 +46,17 @@ class EventBasedCommand:
     @staticmethod
     def parse_arguments(_) -> dict:
         return {}
+
+    def __enter__(self):
+        self.ws.__enter__()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Events listener has a stupid thread loop in it, and may not be closed before we exit the context
+        # it also doesn't have any sort of error handling, so it will most likely output exceptions upon shutdown -_-
+        # This should be fixed in the library, and then removed here.
+        time.sleep(self.events.DELAY * 2)
+        self.events.unsubscribe()
+        time.sleep(self.events.DELAY * 2)
+
+        self.ws.__exit__(exc_type, exc_val, exc_tb)
