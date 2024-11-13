@@ -1,12 +1,10 @@
 import obsws_python as obs
 
 import argparse
-import logging
-import time
 
 from threading import Event
 
-log = logging.getLogger('obwsc')
+from obwsc.log import Log
 
 
 class EventBasedCommand:
@@ -19,13 +17,14 @@ class EventBasedCommand:
 
     def __init__(self, config):
         self.ws = obs.ReqClient(**config)
+        self.ws.logger.disabled = True  # We don't need any logs from the WS library
         self.events = obs.EventClient(**config)
         self.events.callback.register(self.on_exit_started)
         self.done = Event()
 
     def on_exit_started(self, _):
         self.events.unsubscribe()
-        log.warning('OBS is shutting down')
+        Log.warning('OBS is shutting down')
         self.done.set()
 
     def execute(self):
@@ -52,11 +51,5 @@ class EventBasedCommand:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        # Events listener has a stupid thread loop in it, and may not be closed before we exit the context
-        # it also doesn't have any sort of error handling, so it will most likely output exceptions upon shutdown -_-
-        # This should be fixed in the library, and then removed here.
-        time.sleep(self.events.DELAY * 2)
-        self.events.unsubscribe()
-        time.sleep(self.events.DELAY * 2)
-
         self.ws.__exit__(exc_type, exc_val, exc_tb)
+        self.events.unsubscribe()

@@ -2,9 +2,7 @@ import argparse
 
 from obwsc.commands.event_based_command import EventBasedCommand
 
-import logging
-
-log = logging.getLogger('obwsc')
+from obwsc.log import Log
 
 
 class SetCurrentSceneCollection(EventBasedCommand):
@@ -39,7 +37,7 @@ class SetCurrentSceneCollection(EventBasedCommand):
             raise RuntimeError(f'Scene collection "{self.target_collection}" does not exist')
 
         if scenes.current_scene_collection_name == self.target_collection:
-            log.debug('Scene collection already active')
+            Log.debug('Scene collection already active')
             return
 
         self.ws.set_current_scene_collection(self.target_collection)

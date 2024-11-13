@@ -2,9 +2,7 @@ import argparse
 
 from obwsc.commands.event_based_command import EventBasedCommand
 
-import logging
-
-log = logging.getLogger('obwsc')
+from obwsc.log import Log
 
 
 class SetCurrentProfile(EventBasedCommand):
@@ -39,7 +37,7 @@ class SetCurrentProfile(EventBasedCommand):
             raise RuntimeError(f'Profile "{self.target_profile}" does not exist')
 
         if profiles.current_profile_name == self.target_profile:
-            log.debug('Profile already active')
+            Log.debug('Profile already active')
             return
 
         status = self.ws.get_record_status()
@@ -48,4 +46,3 @@ class SetCurrentProfile(EventBasedCommand):
 
         self.ws.set_current_profile(self.target_profile)
         self.done.wait()
-

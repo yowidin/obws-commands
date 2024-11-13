@@ -16,7 +16,7 @@ class Options:
 
         # Handle the case where we are compiled into a standalone package
         if sys.platform == 'darwin' and 'Contents/MacOS' in result:
-            # We are inside an macOS bundle
+            # We are inside af a macOS bundle
             result = os.path.abspath(os.path.join(result, '..', '..', '..'))
         else:
             result = os.getcwd()

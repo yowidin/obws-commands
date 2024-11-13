@@ -2,7 +2,7 @@ from obwsc.commands.event_based_command import EventBasedCommand
 
 import logging
 
-log = logging.getLogger('obwsc')
+from obwsc.log import Log
 
 
 class ResumeRecord(EventBasedCommand):
@@ -28,7 +28,7 @@ class ResumeRecord(EventBasedCommand):
             raise RuntimeError('Recording is not active')
 
         if not status.output_paused:
-            log.debug('Recording is already running')
+            Log.debug('Recording is already running')
             self.done.set()
             return
 
