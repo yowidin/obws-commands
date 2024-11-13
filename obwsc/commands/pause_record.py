@@ -1,8 +1,6 @@
 from obwsc.commands.event_based_command import EventBasedCommand
 
-import logging
-
-log = logging.getLogger('obwsc')
+from obwsc.log import Log
 
 
 class PauseRecord(EventBasedCommand):
@@ -28,10 +26,9 @@ class PauseRecord(EventBasedCommand):
             raise RuntimeError('Recording is not active')
 
         if status.output_paused:
-            log.debug('Recording is already paused')
+            Log.debug('Recording is already paused')
             self.done.set()
             return
 
         self.ws.pause_record()
         self.done.wait()
-

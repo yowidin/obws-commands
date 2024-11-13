@@ -6,10 +6,7 @@ from obwsc.commands.stop_record import StopRecord
 from obwsc.commands.start_record import StartRecord
 from obwsc.commands.set_current_profile import SetCurrentProfile
 from obwsc.commands.set_current_scene_collection import SetCurrentSceneCollection
-
-import logging
-
-log = logging.getLogger('obwsc')
+from obwsc.log import Log
 
 
 class SwitchProfileAndSceneCollection(EventBasedCommand):
@@ -50,7 +47,7 @@ class SwitchProfileAndSceneCollection(EventBasedCommand):
         change_scene = scenes.current_scene_collection_name != self.target_collection
 
         if not change_profile and not change_scene:
-            log.debug('Profile and scene collection already active')
+            Log.debug('Profile and scene collection already active')
             return
 
         if change_profile:

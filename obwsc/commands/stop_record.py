@@ -1,8 +1,6 @@
 from obwsc.commands.event_based_command import EventBasedCommand
 
-import logging
-
-log = logging.getLogger('obwsc')
+from obwsc.log import Log
 
 
 class StopRecord(EventBasedCommand):
@@ -25,10 +23,9 @@ class StopRecord(EventBasedCommand):
     def execute(self):
         status = self.ws.get_record_status()
         if not status.output_active:
-            log.debug('Recording is already stopped')
+            Log.debug('Recording is already stopped')
             self.done.set()
             return
 
         self.ws.stop_record()
         self.done.wait()
-
