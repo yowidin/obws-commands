@@ -17,12 +17,14 @@ class Log:
         self.logger.setLevel(level)
         self.logger.propagate = False
 
+        self.handlers = []
         self._add_handler(self.logger, logging.StreamHandler())
 
     def _add_handler(self, logger, handler):
         handler.setLevel(self.level)
         handler.setFormatter(self.formatter)
         logger.addHandler(handler)
+        self.handlers.append(handler)
 
     @staticmethod
     def add_args(parser: ArgumentParser):
@@ -42,7 +44,12 @@ class Log:
         if Log.INSTANCE is None:
             Log.INSTANCE = Log(level)
         else:
-            raise RuntimeError('Logger already initialized')
+            Log.debug("Log already initialized, skipping")
+
+    def update_level(self, level):
+        self.logger.setLevel(level)
+        for handler in self.handlers:
+            handler.setLevel(level)
 
     @staticmethod
     def debug(*args, **kwargs):
