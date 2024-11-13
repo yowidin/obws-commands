@@ -43,8 +43,6 @@ class Log:
 
         if Log.INSTANCE is None:
             Log.INSTANCE = Log(level)
-        else:
-            Log.debug("Log already initialized, skipping")
 
     def update_level(self, level):
         self.logger.setLevel(level)
